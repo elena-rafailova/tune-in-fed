@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import Button from './Button';
-import './ImageUpload.css';
+import './ImageUpload.scss';
 
 const ImageUpload = (props) => {
     const [file, setFile] = useState();

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Avatar from '../UIElements/Avatar';
 import Card from '../UIElements/Card';
-import './UserItem.css';
+import './UserItem.scss';
 
 const UserItem = (props) => {
     return (

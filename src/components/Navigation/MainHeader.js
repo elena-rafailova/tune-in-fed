@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './MainHeader.css';
+import './MainHeader.scss';
 
 const MainHeader = (props) => {
     return <header className="main-header">{props.children}</header>;
