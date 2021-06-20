@@ -2,7 +2,7 @@
 
 *.css
 *.css.map
-
+.vscode
 .env
 package-lock.json
 .prettierrc
