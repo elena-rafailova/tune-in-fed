@@ -6,11 +6,11 @@ import {
     Switch,
 } from 'react-router-dom';
 
-import Users from './user/pages/Users';
-import Auth from './user/pages/Auth';
-import MainNavigation from './shared/components/Navigation/MainNavigation';
-import { AuthContext } from './shared/context/auth-context';
-import { useAuth } from './shared/hooks/auth-hook';
+import Users from './pages/Users/Users';
+import Auth from './pages/Auth/Auth';
+import MainNavigation from './components/Navigation/MainNavigation';
+import { AuthContext } from './context/auth-context';
+import { useAuth } from './hooks/auth-hook';
 
 const App = () => {
     const { token, login, logout, userId } = useAuth();
