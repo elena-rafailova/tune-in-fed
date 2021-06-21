@@ -5,6 +5,7 @@ import MainHeader from './MainHeader';
 import NavLinks from './NavLinks';
 import SideDrawer from './SideDrawer';
 import Backdrop from '../UIElements/Backdrop';
+import Logo from '../../assets/icons/audiobook.png';
 import './MainNavigation.scss';
 
 const MainNavigation = (props) => {
@@ -21,9 +22,9 @@ const MainNavigation = (props) => {
     return (
         <React.Fragment>
             {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
-            <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
+            <SideDrawer show={drawerIsOpen}>
                 <nav className="main-navigation__drawer-nav">
-                    <NavLinks />
+                    <NavLinks closeDrawerHandler={closeDrawerHandler} />
                 </nav>
             </SideDrawer>
 
@@ -37,7 +38,9 @@ const MainNavigation = (props) => {
                     <span />
                 </button>
                 <h1 className="main-navigation__title">
-                    <Link to="/">TuneIn</Link>
+                    <Link to="/" className="center">
+                        <img src={Logo} alt="logo" /> TuneIn
+                    </Link>
                 </h1>
                 <nav className="main-navigation__header-nav">
                     <NavLinks />

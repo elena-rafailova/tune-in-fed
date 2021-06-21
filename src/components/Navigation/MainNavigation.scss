@@ -1,12 +1,14 @@
+@import '../../variables';
+
 .main-navigation__menu-btn {
-    width: 3rem;
-    height: 3rem;
-    background: transparent;
-    border: none;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    width: 3rem;
+    height: 3rem;
     margin-right: 2rem;
+    background: transparent;
+    border: none;
     cursor: pointer;
 
     span {
@@ -23,6 +25,18 @@
     a {
         text-decoration: none;
         color: white;
+        transition: all 0.2s ease-out;
+
+        &:hover,
+        &:active,
+        &.active {
+            color: $color-apricot;
+        }
+    }
+
+    img {
+        width: 40px;
+        margin-right: 8px;
     }
 }
 

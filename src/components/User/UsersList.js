@@ -9,7 +9,7 @@ const UsersList = (props) => {
         return (
             <div className="center">
                 <Card>
-                    <h2>No users found.</h2>
+                    <h2>No files found.</h2>
                 </Card>
             </div>
         );
@@ -21,8 +21,8 @@ const UsersList = (props) => {
                 <UserItem
                     key={user.id}
                     id={user.id}
-                    image={user.image}
-                    name={user.name}
+                    image={user.thumbUrl}
+                    name={user.title}
                 />
             ))}
         </ul>

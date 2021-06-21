@@ -1,49 +1,53 @@
+@import '../../variables';
+
 .nav-links {
     list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 
-    li {
+    .nav-item-wrapper {
         margin: 1rem;
     }
 
-    a {
-        border: 1px solid transparent;
-        color: #292929;
-        text-decoration: none;
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         padding: 0.5rem;
+        text-decoration: none;
+        color: $color-dark;
+        font-weight: bold;
+        transition: all 0.2s ease-out;
+        cursor: pointer;
+        user-select: none;
 
         &:hover,
         &:active,
         &.active {
-            background: #f7f1c1;
-            border-color: #292929;
-            color: #292929;
-        }
-    }
+            color: $color-apricot;
 
-    button {
-        cursor: pointer;
-        border: 1px solid #292929;
-        color: #292929;
-        background: transparent;
-        padding: 0.5rem;
-        font: inherit;
-
-        &:focus {
-            outline: none;
+            svg {
+                fill: $color-apricot;
+            }
         }
 
-        &:hover,
-        &:active {
-            background: #292929;
-            color: white;
+        &.active svg {
+            fill: $color-apricot;
+            transform: rotate(0deg);
+        }
+
+        svg {
+            transform: rotate(180deg);
+            display: block;
+            width: 15px;
+            margin: 5px;
+            transition: transform 0.3s ease-out;
         }
     }
 }
@@ -52,25 +56,17 @@
     .nav-links {
         flex-direction: row;
 
-        li {
+        .nav-item-wrapper {
             margin: 0 0.5rem;
         }
 
-        a {
+        .nav-item {
             color: white;
             text-decoration: none;
         }
 
-        button {
-            border: 1px solid white;
-            color: white;
-            background: transparent;
-
-            &:hover,
-            &:active {
-                background: #f7f1c1;
-                color: #292929;
-            }
+        svg {
+            fill: white;
         }
     }
 }

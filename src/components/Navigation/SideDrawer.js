@@ -13,7 +13,10 @@ const SideDrawer = (props) => {
             mountOnEnter
             unmountOnExit
         >
-            <aside className="side-drawer" onClick={props.onClick}>
+            <aside
+                className="side-drawer small-lightblue-scrollbar"
+                onClick={props.onClick}
+            >
                 {props.children}
             </aside>
         </CSSTransition>
