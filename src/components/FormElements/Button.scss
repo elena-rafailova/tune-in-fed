@@ -1,14 +1,17 @@
+@import '../../variables';
+
 .button {
     font: inherit;
+    display: inline-block;
     padding: 0.5rem 1.5rem;
-    border: 1px solid #ecb7c9;
-    border-radius: 4px;
-    background: #ecb7c9;
-    color: white;
-    cursor: pointer;
     margin-right: 1rem;
     text-decoration: none;
-    display: inline-block;
+    border: 1px solid $color-citrus;
+    border-radius: 4px;
+    background: $color-citrus;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
 
     &:focus {
         outline: none;
@@ -16,30 +19,31 @@
 
     &:hover,
     &:active {
-        background: #ecb7c9;
-        border-color: #ecb7c9;
+        background: $color-apricot;
+        border-color: $color-apricot;
     }
 }
 
 .button--inverse {
     background: transparent;
-    color: #ecb7c9;
+    color: $color-citrus;
 
     &:hover,
     &:active {
         color: white;
-        background: #ecb7c9;
+        background: $color-citrus;
+        border-color: $color-citrus;
     }
 }
 
 .button--danger {
-    background: #830000;
-    border-color: #830000;
+    background: $color-coral;
+    border-color: $color-coral;
 
     &:hover,
     &:active {
-        background: #ecb7c9;
-        border-color: #ecb7c9;
+        background: $color-citrus;
+        border-color: $color-citrus;
     }
 }
 

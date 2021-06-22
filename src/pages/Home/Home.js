@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import UsersList from '../../components/User/UsersList';
+import FilesList from '../../components/File/FilesList';
+import SubscriptionsList from '../../components/Subscription/SubscriptionsList';
 import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../hooks/http-hook';
@@ -9,6 +10,7 @@ const Home = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedFiles, setLoadedFiles] = useState();
     const [loadedSubscriptions, setLoadedSubscriptions] = useState();
+    const [newFiles, setNewFiles] = useState();
 
     useEffect(() => {
         const fetchSubscriptions = async () => {
@@ -17,7 +19,6 @@ const Home = () => {
                     process.env.REACT_APP_BACKEND_URL + '/plans'
                 );
 
-                console.log(responseData);
                 setLoadedSubscriptions(responseData.plans);
             } catch (err) {}
         };
@@ -29,12 +30,25 @@ const Home = () => {
                     process.env.REACT_APP_BACKEND_URL + '/library'
                 );
 
-                console.log(responseData);
                 setLoadedFiles(responseData.files);
             } catch (err) {}
         };
         fetchFiles();
     }, [sendRequest]);
+
+    useEffect(() => {
+        if (loadedFiles) {
+            setNewFiles(
+                loadedFiles.filter((file) => {
+                    let hasNew = file.categories.find(
+                        (cat) => cat.title === 'new'
+                    );
+
+                    return typeof hasNew !== 'undefined';
+                })
+            );
+        }
+    }, [loadedFiles]);
 
     return (
         <React.Fragment>
@@ -45,9 +59,20 @@ const Home = () => {
                 </div>
             )}
             {!isLoading && loadedSubscriptions && (
-                <div>Loaded subscriptions</div>
+                <SubscriptionsList items={loadedSubscriptions} />
             )}
-            {!isLoading && loadedFiles && <UsersList items={loadedFiles} />}
+            {!isLoading && newFiles && (
+                <div>
+                    <h1 className="ta-center m-10 mt-30">New Additions</h1>
+                    <FilesList items={newFiles} />
+                </div>
+            )}
+            {!isLoading && loadedFiles && (
+                <div>
+                    <h1 className="ta-center m-10 mt-30">All</h1>
+                    <FilesList items={loadedFiles} />
+                </div>
+            )}
         </React.Fragment>
     );
 };

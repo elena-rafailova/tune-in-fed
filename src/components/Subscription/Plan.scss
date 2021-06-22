@@ -1,0 +1,29 @@
+.plan-container {
+    margin: 5px 15px;
+
+    h2 {
+        text-transform: capitalize;
+    }
+
+    h3 {
+        font-weight: normal;
+        margin: 20px 0;
+    }
+
+    .plan-price-info {
+        margin: 10px 0;
+    }
+}
+
+.plan-item__content {
+    width: 350px;
+    height: 380px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+
+    button {
+        align-self: stretch;
+    }
+}

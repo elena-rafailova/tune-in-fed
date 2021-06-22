@@ -1,16 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { AuthContext } from '../../context/auth-context';
+import { CategoriesContext } from '../../context/categories-context';
 import Dropdown from './Dropdown';
 import { ReactComponent as IconArrow } from '../../assets/icons/up-arrow.svg';
 import './NavLinks.scss';
 
 const NavLinks = ({ closeDrawerHandler }) => {
     const auth = useContext(AuthContext);
+    const categoriesContext = useContext(CategoriesContext);
+
     const [dropdown, setDropdown] = useState({});
 
-    const ProfileDropdownOptions = [
+    const profileOptions = [
         {
             title: 'Settings',
             path: '/profile/settings',
@@ -29,149 +32,6 @@ const NavLinks = ({ closeDrawerHandler }) => {
         {
             title: 'Logout',
             function: auth.logout,
-            cName: 'dropdown-link',
-        },
-    ];
-
-    const CategoriesDropdownOptions = [
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Fictional',
-            path: '/library/fictional',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Business',
-            path: '/library/business',
-            cName: 'dropdown-link',
-        },
-        {
-            title: 'Kids',
-            path: '/library/kids',
             cName: 'dropdown-link',
         },
     ];
@@ -224,13 +84,14 @@ const NavLinks = ({ closeDrawerHandler }) => {
                     Categories
                     <IconArrow />
                 </div>
-                {isDropdownActive('categories') && (
-                    <Dropdown
-                        items={CategoriesDropdownOptions}
-                        closeDrawerHandler={closeDrawerHandler}
-                        className="categories"
-                    />
-                )}
+                {isDropdownActive('categories') &&
+                    categoriesContext.categories && (
+                        <Dropdown
+                            items={categoriesContext.categories}
+                            closeDrawerHandler={closeDrawerHandler}
+                            className="categories"
+                        />
+                    )}
             </li>
             <li
                 className="nav-item-wrapper"
@@ -255,7 +116,7 @@ const NavLinks = ({ closeDrawerHandler }) => {
                     </div>
                     {isDropdownActive('profile') && (
                         <Dropdown
-                            items={ProfileDropdownOptions}
+                            items={profileOptions}
                             closeDrawerHandler={closeDrawerHandler}
                         />
                     )}
