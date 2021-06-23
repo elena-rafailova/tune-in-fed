@@ -1,0 +1,13 @@
+@import '../../variables';
+
+.search-wrapper {
+    margin: 0 auto 10px;
+    padding: 20px;
+    width: 100%;
+    background-color: $color-apricot;
+    text-align: center;
+
+    > * {
+        margin: 5px 0;
+    }
+}

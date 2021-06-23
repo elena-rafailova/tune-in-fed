@@ -34,12 +34,8 @@
 
             svg {
                 fill: $color-apricot;
+                transform: rotate(0deg);
             }
-        }
-
-        &.active svg {
-            fill: $color-apricot;
-            transform: rotate(0deg);
         }
 
         svg {

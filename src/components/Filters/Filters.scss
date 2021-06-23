@@ -1,0 +1,33 @@
+@import '../../variables';
+
+.filter {
+    position: relative;
+    margin: 5px 15px;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover,
+    &.active {
+        color: $color-apricot;
+
+        svg {
+            fill: $color-apricot;
+            transform: rotate(0deg);
+        }
+    }
+
+    svg {
+        transform: rotate(180deg);
+        display: block;
+        width: 15px;
+        margin: 5px;
+        transition: transform 0.2s ease-out;
+    }
+
+    img {
+        width: 25px;
+        margin-right: 3px;
+    }
+}

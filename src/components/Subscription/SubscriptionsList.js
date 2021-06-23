@@ -1,16 +1,13 @@
 import React from 'react';
 
 import Plan from './Plan';
-import Card from '../UIElements/Card';
 import './SubscriptionsList.scss';
 
 const SubscriptionsList = (props) => {
     if (props.items.length === 0) {
         return (
             <div className="center">
-                <Card>
-                    <h2>No plans found.</h2>
-                </Card>
+                <h2>No plans found.</h2>
             </div>
         );
     }
