@@ -12,18 +12,35 @@
     &.active {
         color: $color-apricot;
 
-        svg {
+        &.chosen {
+            color: $color-coral;
+        }
+
+        .arrow-icon {
             fill: $color-apricot;
             transform: rotate(0deg);
         }
+
+        .delete-icon {
+            transform: rotate(90deg);
+
+            g {
+                fill: $color-coral;
+            }
+        }
     }
 
-    svg {
+    .arrow-icon {
         transform: rotate(180deg);
         display: block;
         width: 15px;
         margin: 5px;
-        transition: transform 0.2s ease-out;
+        transition: all 0.2s ease-out;
+    }
+
+    .delete-icon {
+        width: 23px;
+        transition: all 0.2s ease-out;
     }
 
     img {

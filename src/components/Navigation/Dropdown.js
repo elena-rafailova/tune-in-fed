@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import './Dropdown.scss';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import './Dropdown.scss';
 
-function Dropdown({ items, closeDrawerHandler, className }) {
-    const [click, setClick] = useState(false);
-
-    const handleClick = () => setClick(!click);
-
+const Dropdown = ({
+    items,
+    closeDrawerHandler,
+    className,
+    setIsClicked,
+    clicked,
+}) => {
     return (
         <React.Fragment>
             <ul
-                onClick={handleClick}
                 className={`${
-                    click ? 'dropdown-menu clicked' : 'dropdown-menu'
+                    !clicked ? 'dropdown-menu closed' : 'dropdown-menu'
                 } ${className}`}
             >
                 {items.map((item, index) => {
@@ -23,7 +24,7 @@ function Dropdown({ items, closeDrawerHandler, className }) {
                                     className={item.cName}
                                     to={item.path}
                                     onClick={() => {
-                                        setClick(false);
+                                        setIsClicked(false);
                                         if (closeDrawerHandler) {
                                             closeDrawerHandler();
                                         }
@@ -35,7 +36,7 @@ function Dropdown({ items, closeDrawerHandler, className }) {
                                 <button
                                     className={item.cName}
                                     onClick={() => {
-                                        setClick(false);
+                                        setIsClicked(false);
                                         item.function();
                                         if (closeDrawerHandler) {
                                             closeDrawerHandler();
@@ -51,6 +52,6 @@ function Dropdown({ items, closeDrawerHandler, className }) {
             </ul>
         </React.Fragment>
     );
-}
+};
 
 export default Dropdown;

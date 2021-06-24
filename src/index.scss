@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 @import './variables';
+
+:root {
+    --active-color: $color-apple-core;
+}
 
 * {
     margin: 0;
@@ -8,7 +12,7 @@
 }
 
 html {
-    font-family: 'Lora', serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {

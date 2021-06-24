@@ -32,7 +32,7 @@ const Search = () => {
             } catch (err) {}
         };
 
-        if (search.length > 3) {
+        if (search.length >= 3) {
             fetchResults();
         }
     }, [search]);

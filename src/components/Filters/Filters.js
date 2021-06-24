@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import Dropdown from '../Navigation/Dropdown';
 import SortIcon from '../../assets/icons/sort.png';
 import LanguageIcon from '../../assets/icons/language.png';
 import HeadphonesIcon from '../../assets/icons/headphones.png';
-import DeleteIcon from '../../assets/icons/delete.png';
-import { ReactComponent as IconArrow } from '../../assets/icons/up-arrow.svg';
+import useClickOutside from '../../hooks/click-outside-hook';
+import { ReactComponent as ArrowIcon } from '../../assets/icons/up-arrow.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/icons/delete-icon.svg';
 import './Filters.scss';
 
 const Filters = ({ filesOriginal, setFilesCopy }) => {
@@ -16,7 +17,11 @@ const Filters = ({ filesOriginal, setFilesCopy }) => {
         sort: 2,
     };
 
-    const [dropdown, setDropdown] = useState({});
+    const [dropdownsState, setDropdownsState] = useState({
+        type: false,
+        sort: false,
+        language: false,
+    });
     const [filtersToApply, setFiltersToApply] = useState(
         JSON.parse(sessionStorage.getItem(SESSION_STORAGE_FILTERS_KEY)) || {}
     );
@@ -104,22 +109,44 @@ const Filters = ({ filesOriginal, setFilesCopy }) => {
         });
     };
 
-    const toggleDropdown = (clickedTabName) => {
-        if (dropdown.tabName === clickedTabName) {
-            setDropdown({
-                tabName: clickedTabName,
-                isOpen: !dropdown.isOpen,
-            });
-        } else {
-            setDropdown({
-                tabName: clickedTabName,
-                isOpen: true,
-            });
+    const dropdownLanguageRef = useClickOutside(
+        useCallback(() => {
+            if (dropdownsState.language) {
+                toggleDropdown('language', false);
+            }
+        }, [dropdownsState.language])
+    );
+
+    const dropdownTypeRef = useClickOutside(
+        useCallback(() => {
+            if (dropdownsState.type) {
+                toggleDropdown('type', false);
+            }
+        }, [dropdownsState.type])
+    );
+
+    const dropdownSortRef = useClickOutside(
+        useCallback(() => {
+            if (dropdownsState.sort) {
+                toggleDropdown('sort', false);
+            }
+        }, [dropdownsState.sort])
+    );
+
+    const toggleDropdown = (clickedTabName, value) => {
+        if (value) {
+            Object.keys(dropdownsState).forEach(
+                (key) => (dropdownsState[key] = false)
+            );
         }
+        setDropdownsState({
+            ...dropdownsState,
+            [clickedTabName]: value,
+        });
     };
 
     const isDropdownActive = (tabName) => {
-        return dropdown.tabName === tabName && dropdown.isOpen;
+        return dropdownsState[tabName];
     };
 
     const saveFilters = (title, fName, type, prop, value, additionalProp) => {
@@ -184,70 +211,91 @@ const Filters = ({ filesOriginal, setFilesCopy }) => {
 
     return (
         <div className="center">
-            <div onClick={() => toggleDropdown('type')}>
+            <div
+                ref={dropdownTypeRef}
+                onClick={() => toggleDropdown('type', !dropdownsState.type)}
+            >
                 <div
                     className={`filter center ${
                         isDropdownActive('type') ? 'active' : ''
-                    }`}
+                    }
+                        ${filtersToApply.type ? 'chosen' : ''}`}
                 >
                     <img src={HeadphonesIcon} alt="type" />{' '}
                     {filtersToApply.type ? filtersToApply.type.title : 'TYPE'}
                     {filtersToApply.type ? (
-                        <img
-                            src={DeleteIcon}
-                            alt="delete"
+                        <DeleteIcon
+                            className="delete-icon"
                             onClick={() => removeFilter('type')}
                         />
                     ) : (
-                        <IconArrow />
+                        <ArrowIcon className="arrow-icon" />
                     )}
                 </div>
-                {isDropdownActive('type') && <Dropdown items={typeOptions} />}
+                <Dropdown
+                    items={typeOptions}
+                    setIsClicked={(value) => toggleDropdown('type', value)}
+                    clicked={isDropdownActive('type')}
+                />
             </div>
 
-            <div onClick={() => toggleDropdown('language')}>
+            <div
+                ref={dropdownLanguageRef}
+                onClick={() =>
+                    toggleDropdown('language', !dropdownsState.language)
+                }
+            >
                 <div
                     className={`filter center ${
                         isDropdownActive('language') ? 'active' : ''
-                    }`}
+                    }
+                    ${filtersToApply.language ? 'chosen' : ''}`}
                 >
                     <img src={LanguageIcon} alt="language" />{' '}
                     {filtersToApply.language
                         ? filtersToApply.language.title
                         : 'LANGUAGE'}
                     {filtersToApply.language ? (
-                        <img
-                            src={DeleteIcon}
-                            alt="delete"
+                        <DeleteIcon
+                            className="delete-icon"
                             onClick={() => removeFilter('language')}
                         />
                     ) : (
-                        <IconArrow />
+                        <ArrowIcon className="arrow-icon" />
                     )}
                 </div>
-                {isDropdownActive('language') && (
-                    <Dropdown items={langOptions} />
-                )}
+                <Dropdown
+                    items={langOptions}
+                    setIsClicked={(value) => toggleDropdown('language', value)}
+                    clicked={isDropdownActive('language')}
+                />
             </div>
-            <div onClick={() => toggleDropdown('sort')}>
+            <div
+                ref={dropdownSortRef}
+                onClick={() => toggleDropdown('sort', !dropdownsState.sort)}
+            >
                 <div
                     className={`filter center ${
                         isDropdownActive('sort') ? 'active' : ''
-                    }`}
+                    }
+                    ${filtersToApply.sort ? 'chosen' : ''}`}
                 >
                     <img src={SortIcon} alt="sort" />{' '}
                     {filtersToApply.sort ? filtersToApply.sort.title : 'SORT'}
                     {filtersToApply.sort ? (
-                        <img
-                            src={DeleteIcon}
-                            alt="delete"
+                        <DeleteIcon
+                            className="delete-icon"
                             onClick={() => removeFilter('sort')}
                         />
                     ) : (
-                        <IconArrow />
+                        <ArrowIcon className="arrow-icon" />
                     )}
                 </div>
-                {isDropdownActive('sort') && <Dropdown items={sortOptions} />}
+                <Dropdown
+                    items={sortOptions}
+                    setIsClicked={(value) => toggleDropdown('sort', value)}
+                    clicked={isDropdownActive('sort')}
+                />
             </div>
         </div>
     );

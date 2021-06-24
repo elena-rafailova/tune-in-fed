@@ -1,17 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { AuthContext } from '../../context/auth-context';
 import { CategoriesContext } from '../../context/categories-context';
 import Dropdown from './Dropdown';
-import { ReactComponent as IconArrow } from '../../assets/icons/up-arrow.svg';
+import useClickOutside from '../../hooks/click-outside-hook';
+import { ReactComponent as ArrowIcon } from '../../assets/icons/up-arrow.svg';
 import './NavLinks.scss';
 
 const NavLinks = ({ closeDrawerHandler }) => {
     const auth = useContext(AuthContext);
     const categoriesContext = useContext(CategoriesContext);
 
-    const [dropdown, setDropdown] = useState({});
+    const [dropdownsState, setDropdownsState] = useState({
+        profile: false,
+        categories: false,
+    });
 
     const profileOptions = [
         {
@@ -36,22 +40,42 @@ const NavLinks = ({ closeDrawerHandler }) => {
         },
     ];
 
-    const toggleDropdown = (clickedTabName) => {
-        if (dropdown.tabName === clickedTabName) {
-            setDropdown({
-                tabName: clickedTabName,
-                isOpen: !dropdown.isOpen,
-            });
-        } else {
-            setDropdown({
-                tabName: clickedTabName,
-                isOpen: true,
-            });
+    const dropdownCategoriesRef = useClickOutside(
+        useCallback(() => {
+            if (dropdownsState.categories) {
+                setDropdownsState({
+                    ...dropdownsState,
+                    categories: false,
+                });
+            }
+        }, [dropdownsState.categories])
+    );
+
+    const dropdownProfileRef = useClickOutside(
+        useCallback(() => {
+            if (dropdownsState.profile) {
+                setDropdownsState({
+                    ...dropdownsState,
+                    profile: false,
+                });
+            }
+        }, [dropdownsState.profile])
+    );
+
+    const toggleDropdown = (clickedTabName, value) => {
+        if (value) {
+            Object.keys(dropdownsState).forEach(
+                (key) => (dropdownsState[key] = false)
+            );
         }
+        setDropdownsState({
+            ...dropdownsState,
+            [clickedTabName]: value,
+        });
     };
 
     const isDropdownActive = (tabName) => {
-        return dropdown.tabName === tabName && dropdown.isOpen;
+        return dropdownsState[tabName];
     };
 
     return (
@@ -74,7 +98,10 @@ const NavLinks = ({ closeDrawerHandler }) => {
             </li>
             <li
                 className="nav-item-wrapper"
-                onClick={() => toggleDropdown('categories')}
+                onClick={() =>
+                    toggleDropdown('categories', !dropdownsState.categories)
+                }
+                ref={dropdownCategoriesRef}
             >
                 <div
                     className={`nav-item ${
@@ -82,16 +109,17 @@ const NavLinks = ({ closeDrawerHandler }) => {
                     }`}
                 >
                     Categories
-                    <IconArrow />
+                    <ArrowIcon />
                 </div>
-                {isDropdownActive('categories') &&
-                    categoriesContext.categories && (
-                        <Dropdown
-                            items={categoriesContext.categories}
-                            closeDrawerHandler={closeDrawerHandler}
-                            className="categories"
-                        />
-                    )}
+                <Dropdown
+                    items={categoriesContext.categories}
+                    closeDrawerHandler={closeDrawerHandler}
+                    className="categories"
+                    setIsClicked={(value) =>
+                        toggleDropdown('categories', value)
+                    }
+                    clicked={isDropdownActive('categories')}
+                />
             </li>
             <li
                 className="nav-item-wrapper"
@@ -104,7 +132,10 @@ const NavLinks = ({ closeDrawerHandler }) => {
             {auth.isLoggedIn && (
                 <li
                     className="nav-item-wrapper"
-                    onClick={() => toggleDropdown('profile')}
+                    onClick={() =>
+                        toggleDropdown('profile', !dropdownsState.profile)
+                    }
+                    ref={dropdownProfileRef}
                 >
                     <div
                         className={`nav-item ${
@@ -112,14 +143,16 @@ const NavLinks = ({ closeDrawerHandler }) => {
                         }`}
                     >
                         Profile
-                        <IconArrow />
+                        <ArrowIcon />
                     </div>
-                    {isDropdownActive('profile') && (
-                        <Dropdown
-                            items={profileOptions}
-                            closeDrawerHandler={closeDrawerHandler}
-                        />
-                    )}
+                    <Dropdown
+                        items={profileOptions}
+                        closeDrawerHandler={closeDrawerHandler}
+                        setIsClicked={(value) =>
+                            toggleDropdown('profile', value)
+                        }
+                        clicked={isDropdownActive('profile')}
+                    />
                 </li>
             )}
             {!auth.isLoggedIn && (
