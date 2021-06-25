@@ -59,6 +59,11 @@ const Input = (props) => {
                 onChange={changeHandler}
                 onBlur={touchHandler}
                 value={inputState.value}
+                disabled={
+                    typeof props.disabled !== 'undefined'
+                        ? props.disabled
+                        : false
+                }
             />
         ) : (
             <textarea
@@ -67,6 +72,11 @@ const Input = (props) => {
                 onChange={changeHandler}
                 onBlur={touchHandler}
                 value={inputState.value}
+                disabled={
+                    typeof props.disabled !== 'undefined'
+                        ? props.disabled
+                        : false
+                }
             />
         );
 

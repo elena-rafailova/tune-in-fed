@@ -21,6 +21,15 @@ const ImageUpload = (props) => {
         fileReader.readAsDataURL(file);
     }, [file]);
 
+    useEffect(() => {
+        if (!props.previewUrl) {
+            return;
+        }
+
+        setPreviewUrl(props.previewUrl);
+        setIsValid(true);
+    }, []);
+
     const pickedHandler = (event) => {
         let pickedFile;
         let fileIsValid = isValid;

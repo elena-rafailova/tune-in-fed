@@ -1,0 +1,37 @@
+@import '../../variables';
+
+.payment-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+
+    h2 {
+        margin-top: 15px;
+        text-transform: capitalize;
+    }
+
+    h3 {
+        font-weight: normal;
+        margin: 20px 0;
+    }
+
+    .plan-price-info {
+        margin: 20px 0;
+        border: 2px solid $color-coral;
+        padding: 10px;
+        border-radius: 6px;
+
+        b {
+            font-size: 20px;
+        }
+    }
+
+    .payment-date {
+        margin: 20px 0;
+        color: $color-coral;
+        font-weight: bold;
+        font-size: 22px;
+    }
+}

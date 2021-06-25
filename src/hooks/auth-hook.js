@@ -26,6 +26,18 @@ export const useAuth = () => {
         );
     }, []);
 
+    const updateUser = useCallback((user) => {
+        setUser(user);
+        var userData = JSON.parse(localStorage.getItem('userData'));
+        localStorage.setItem(
+            'userData',
+            JSON.stringify({
+                ...userData,
+                user: user,
+            })
+        );
+    });
+
     const logout = useCallback(() => {
         setToken(null);
         setTokenExpDate(null);
@@ -60,5 +72,5 @@ export const useAuth = () => {
         }
     }, [login]);
 
-    return { token, login, logout, userId, user };
+    return { token, login, logout, userId, user, updateUser };
 };

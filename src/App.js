@@ -23,7 +23,7 @@ import { useAuth } from './hooks/auth-hook';
 import { useHttpClient } from './hooks/http-hook';
 
 const App = () => {
-    const { token, login, logout, userId, user } = useAuth();
+    const { token, login, logout, userId, user, updateUser } = useAuth();
     const httpClient = useHttpClient();
     const [categories, setCategories] = useState();
 
@@ -115,6 +115,7 @@ const App = () => {
                 userId: userId,
                 login: login,
                 logout: logout,
+                updateUser: updateUser,
                 user: user,
             }}
         >

@@ -5,13 +5,34 @@ import Card from '../UIElements/Card';
 import Button from '../FormElements/Button';
 import TickIcon from '../../assets/icons/double-tick.png';
 import { AuthContext } from '../../context/auth-context';
+import { useHttpClient } from '../../hooks/http-hook';
 import './Plan.scss';
 
 const Plan = ({ plan, history }) => {
     const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-    const savePlan = () => {
-        console.log('send request to save users plan');
+    const savePlan = async (planId) => {
+        try {
+            const responseData = await sendRequest(
+                process.env.REACT_APP_BACKEND_URL + '/plans/savePlan/' + planId,
+                'GET',
+                null,
+                {
+                    Authorization: 'Bearer ' + auth.token,
+                }
+            );
+
+            if (responseData.success) {
+                let newUser = {
+                    ...auth.user,
+                    planId: responseData.planId,
+                    isSubActive: true,
+                    nextPaymentDate: responseData.nextPaymentDate,
+                };
+                auth.updateUser(newUser);
+            }
+        } catch (err) {}
     };
 
     return (
