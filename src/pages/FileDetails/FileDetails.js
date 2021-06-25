@@ -76,8 +76,8 @@ const FileDetails = () => {
                         </div>
                         <div className="main-info-container">
                             <HeartIcon className="heart-icon" />
-                            <h1 className="ta-center">{file.title}</h1>
-                            <h3>{file.creator}</h3>
+                            <h1 className="ta-center title">{file.title}</h1>
+                            <h3 className="creator">{file.creator}</h3>
                             <br />
                             <p>{file.description}</p>
                             <br />

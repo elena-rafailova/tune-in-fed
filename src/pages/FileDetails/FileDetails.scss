@@ -22,8 +22,9 @@
     width: 100%;
 
     .file-image {
-        width: 180px;
-        margin-right: 10px;
+        width: 215px;
+        margin-right: 40px;
+        margin-top: 25px;
         border-radius: 5px;
     }
 
@@ -76,8 +77,8 @@
     .episode-container {
         cursor: pointer;
         justify-content: flex-start;
-        max-width: 350px;
-        margin: 5px 0;
+        width: 500px;
+        margin: 10px 0;
         padding: 8px 15px;
         font-size: 16px;
         text-align: left;
@@ -98,8 +99,14 @@
 
 .listening-station-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     width: 100%;
     flex-wrap: wrap;
+}
+
+.main-info-container {
+    .title {
+        color: $color-blueberry;
+    }
 }

@@ -32,6 +32,10 @@ main {
     margin-top: 65px; //header height
     display: flex;
     flex-direction: column;
+    background: url('./assets/icons/landing-page.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 a {
