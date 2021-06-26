@@ -1,17 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react';
 
 import Card from '../../components/UIElements/Card';
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import UserFilesList from '../../components/UserFiles/UserFilesList';
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../context/auth-context';
-import '../Auth/Auth.scss';
 import './Profile.scss';
 
 const ProfileLists = () => {
     const auth = useContext(AuthContext);
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
     const [lists, setLists] = useState();
 
     useEffect(() => {
@@ -29,7 +27,6 @@ const ProfileLists = () => {
                     );
 
                     if (responseData.success) {
-                        console.log(responseData);
                         setLists({
                             wishlist: responseData.wishlist,
                             currents: responseData.currents,
@@ -44,18 +41,52 @@ const ProfileLists = () => {
     }, []);
 
     return (
-        <div>
-            <ErrorModal error={error} onClear={clearError} />
-            <Card className="authentication">
+        <div className="center lists-container">
+            <Card className="list">
                 {isLoading && <LoadingSpinner asOverlay />}
-                {lists && (
+                {lists && lists.wishlist && lists.wishlist.length ? (
                     <div>
                         <h3>Wishlist</h3>
-                        <UserFilesList items={lists.wishlist} />
-                        <h3>Keep listeting to</h3>
-                        <UserFilesList items={lists.currents} />
-                        <h3>Archive</h3>
-                        <UserFilesList items={lists.archive} />
+                        <div className="list-items small-lightblue-scrollbar">
+                            <UserFilesList items={lists.wishlist} />
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <h3>Wishlist</h3>
+                        <h4>You don't have any wishlist files yet.</h4>
+                    </div>
+                )}
+            </Card>
+            <Card className="list">
+                {isLoading && <LoadingSpinner asOverlay />}
+                {lists && lists.currents && lists.currents.length ? (
+                    <div>
+                        <h3>Keep listening to</h3>
+                        <div className="list-items small-lightblue-scrollbar">
+                            <UserFilesList items={lists.currents} />
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <h3>Keep listening to</h3>
+                        <h4>You don't have any current listens yet.</h4>
+                    </div>
+                )}
+            </Card>
+            <Card className="list">
+                {isLoading && <LoadingSpinner asOverlay />}
+                {lists && lists.archive && lists.archive.length ? (
+                    <div>
+                        <h3>Watch again</h3>
+                        <div className="list-items small-lightblue-scrollbar">
+                            <UserFilesList items={lists.archive} />
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <h3>Watch again</h3>
+                        <h4>You don't have any listened files yet.</h4>
                     </div>
                 )}
             </Card>

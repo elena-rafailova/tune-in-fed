@@ -1,8 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export const useHttpClient = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
 
     const activeHttpRequests = useRef([]);
 
@@ -33,17 +33,13 @@ export const useHttpClient = () => {
                 setIsLoading(false);
                 return responseData;
             } catch (err) {
-                setError(err.message);
+                toast.error(err.message);
                 setIsLoading(false);
                 throw err;
             }
         },
         []
     );
-
-    const clearError = () => {
-        setError(null);
-    };
 
     useEffect(() => {
         return () => {
@@ -54,5 +50,5 @@ export const useHttpClient = () => {
         };
     }, []);
 
-    return { isLoading, error, sendRequest, clearError };
+    return { isLoading, sendRequest };
 };

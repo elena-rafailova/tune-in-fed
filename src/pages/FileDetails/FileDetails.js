@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, withRouter } from 'react-router';
+import { toast } from 'react-toastify';
 
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import Card from '../../components/UIElements/Card';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import AudioPlayer from '../../components/AudioPlayer/AudioPlayer';
 import { useHttpClient } from '../../hooks/http-hook';
+import { AuthContext } from '../../context/auth-context';
 import LanguageIcon from '../../assets/icons/language.png';
 import CategoryIcon from '../../assets/icons/category.png';
 import AudiobookIcon from '../../assets/icons/audiobook-icon.png';
@@ -13,11 +14,119 @@ import PodcastIcon from '../../assets/icons/podcast-icon.png';
 import { ReactComponent as HeartIcon } from '../../assets/icons/heart-icon.svg';
 import './FileDetails.scss';
 
-const FileDetails = () => {
+const FileDetails = ({ history }) => {
     let { id } = useParams();
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const auth = useContext(AuthContext);
+    const { isLoading, sendRequest } = useHttpClient();
     const [file, setFile] = useState();
     const [selectedTrackIndex, setSelectedTrackIndex] = useState(null);
+    const [isInWishlist, setIsInWishlist] = useState(null);
+
+    const toggleWishlist = async (fileId) => {
+        if (!auth.token) {
+            history.push('/auth');
+        } else {
+            try {
+                let state = !isFileInWishlist(fileId);
+                const responseData = await sendRequest(
+                    process.env.REACT_APP_BACKEND_URL +
+                        '/library/toggleWishlist',
+                    'POST',
+                    JSON.stringify({
+                        fileId: fileId,
+                        state: +state,
+                    }),
+                    {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + auth.token,
+                    }
+                );
+
+                if (responseData.success) {
+                    setIsInWishlist(state);
+                    auth.updateUser({
+                        ...auth.user,
+                        wishlist: responseData.wishlist,
+                    });
+                    let message = `You have successfully ${
+                        state ? 'added' : 'removed'
+                    } file ${state ? 'to' : 'from'} wishlist!`;
+                    toast.success(message);
+                }
+            } catch (err) {}
+        }
+    };
+
+    const toggleCurrents = async (fileId) => {
+        if (!auth.token) {
+            history.push('/auth');
+        } else {
+            try {
+                let state = !auth.user.currents.includes(fileId);
+                if (state) {
+                    const responseData = await sendRequest(
+                        process.env.REACT_APP_BACKEND_URL +
+                            '/library/toggleCurrents',
+                        'POST',
+                        JSON.stringify({
+                            fileId: fileId,
+                            state: +state,
+                        }),
+                        {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + auth.token,
+                        }
+                    );
+
+                    if (responseData.success) {
+                        auth.updateUser({
+                            ...auth.user,
+                            currents: responseData.currents,
+                        });
+                    }
+                }
+            } catch (err) {}
+        }
+    };
+
+    const toggleArchive = async (fileId) => {
+        if (!auth.token) {
+            history.push('/auth');
+        } else {
+            try {
+                let state = !auth.user.archive.includes(fileId);
+                if (state) {
+                    const responseData = await sendRequest(
+                        process.env.REACT_APP_BACKEND_URL +
+                            '/library/toggleArchive',
+                        'POST',
+                        JSON.stringify({
+                            fileId: fileId,
+                            state: +state,
+                        }),
+                        {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + auth.token,
+                        }
+                    );
+
+                    if (responseData.success) {
+                        auth.updateUser({
+                            ...auth.user,
+                            archive: responseData.archive,
+                            currents: responseData.currents,
+                        });
+                    }
+                }
+            } catch (err) {}
+        }
+    };
+
+    const isFileInWishlist = (fileId) => {
+        return (
+            (auth.isLoggedIn && auth.user.wishlist.includes(fileId)) || false
+        );
+    };
 
     useEffect(() => {
         const fetchFile = async () => {
@@ -34,13 +143,12 @@ const FileDetails = () => {
 
     return (
         <div>
-            <ErrorModal error={error} onClear={clearError} />
-            {isLoading && (
+            {isLoading && !file && (
                 <div className="center">
                     <LoadingSpinner />
                 </div>
             )}
-            {!isLoading && file && (
+            {file && (
                 <div className="file-details-container">
                     <div className="details-container">
                         <div>
@@ -75,7 +183,14 @@ const FileDetails = () => {
                             </div>
                         </div>
                         <div className="main-info-container">
-                            <HeartIcon className="heart-icon" />
+                            <HeartIcon
+                                className={`heart-icon ${
+                                    isFileInWishlist(file.id) || isInWishlist
+                                        ? 'active'
+                                        : ''
+                                }`}
+                                onClick={() => toggleWishlist(file.id)}
+                            />
                             <h1 className="ta-center title">{file.title}</h1>
                             <h3 className="creator">{file.creator}</h3>
                             <br />
@@ -144,6 +259,8 @@ const FileDetails = () => {
                                 tracks={file.episodes}
                                 artistName={file.creator}
                                 selectedTrackIndex={selectedTrackIndex}
+                                onPlay={() => toggleCurrents(file.id)}
+                                onFinish={() => toggleArchive(file.id)}
                             />
                         </div>
                     </div>
@@ -153,4 +270,4 @@ const FileDetails = () => {
     );
 };
 
-export default FileDetails;
+export default withRouter(FileDetails);

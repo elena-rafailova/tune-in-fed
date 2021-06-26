@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { withRouter } from 'react-router';
+import { toast } from 'react-toastify';
 
 import Card from '../UIElements/Card';
 import Button from '../FormElements/Button';
@@ -10,7 +11,7 @@ import './Plan.scss';
 
 const Plan = ({ plan, history }) => {
     const auth = useContext(AuthContext);
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
 
     const savePlan = async (planId) => {
         try {
@@ -31,6 +32,7 @@ const Plan = ({ plan, history }) => {
                     nextPaymentDate: responseData.nextPaymentDate,
                 };
                 auth.updateUser(newUser);
+                toast.success('You have successfully subscribed!');
             }
         } catch (err) {}
     };

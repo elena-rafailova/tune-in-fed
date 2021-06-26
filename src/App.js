@@ -5,11 +5,12 @@ import {
     Redirect,
     Switch,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Home from './pages/Home/Home';
 import Auth from './pages/Auth/Auth';
 import Search from './pages/Search/Search';
-import Help from './pages/Help/Help';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 import FileDetails from './pages/FileDetails/FileDetails';
 import ProfilePayment from './pages/Profile/ProfilePayment';
@@ -63,9 +64,6 @@ const App = () => {
                 <Route path="/library/:categoryName" exact>
                     <CategoryPage />
                 </Route>
-                <Route path="/help" exact>
-                    <Help />
-                </Route>
                 <Route path="/profile/payment" exact>
                     <ProfilePayment />
                 </Route>
@@ -93,9 +91,6 @@ const App = () => {
                 <Route path="/library/:categoryName" exact>
                     <CategoryPage />
                 </Route>
-                <Route path="/help" exact>
-                    <Help />
-                </Route>
                 <Route path="/auth">
                     <Auth />
                 </Route>
@@ -119,6 +114,7 @@ const App = () => {
                 user: user,
             }}
         >
+            <ToastContainer autoClose={2500} hideProgressBar={true} />
             <Router>
                 <CategoriesContext.Provider
                     value={{ categories: categories || [] }}

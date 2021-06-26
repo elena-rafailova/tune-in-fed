@@ -19,18 +19,18 @@ const NavLinks = ({ closeDrawerHandler }) => {
 
     const profileOptions = [
         {
-            title: 'Settings',
-            path: '/profile/settings',
+            title: 'My Library',
+            path: '/profile/lists',
             cName: 'dropdown-link',
         },
         {
-            title: 'Payment',
+            title: 'Billing & Subscription',
             path: '/profile/payment',
             cName: 'dropdown-link',
         },
         {
-            title: 'Lists',
-            path: '/profile/lists',
+            title: 'Settings',
+            path: '/profile/settings',
             cName: 'dropdown-link',
         },
         {
@@ -114,20 +114,12 @@ const NavLinks = ({ closeDrawerHandler }) => {
                 <Dropdown
                     items={categoriesContext.categories}
                     closeDrawerHandler={closeDrawerHandler}
-                    className="categories"
+                    className="categories-dropdown"
                     setIsClicked={(value) =>
                         toggleDropdown('categories', value)
                     }
                     clicked={isDropdownActive('categories')}
                 />
-            </li>
-            <li
-                className="nav-item-wrapper"
-                onClick={closeDrawerHandler ? closeDrawerHandler : null}
-            >
-                <NavLink to="/help" exact className="nav-item">
-                    Help
-                </NavLink>
             </li>
             {auth.isLoggedIn && (
                 <li
@@ -148,6 +140,7 @@ const NavLinks = ({ closeDrawerHandler }) => {
                     <Dropdown
                         items={profileOptions}
                         closeDrawerHandler={closeDrawerHandler}
+                        className="profile-dropdown"
                         setIsClicked={(value) =>
                             toggleDropdown('profile', value)
                         }

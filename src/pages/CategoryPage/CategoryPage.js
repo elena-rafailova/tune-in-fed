@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import FilesList from '../../components/File/FilesList';
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import Filters from '../../components/Filters/Filters';
 import { useHttpClient } from '../../hooks/http-hook';
@@ -10,7 +9,7 @@ import './CategoryPage.scss';
 
 const CategoryPage = () => {
     let { categoryName } = useParams();
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
     const [loadedFiles, setLoadedFiles] = useState();
     const [filesCopy, setFilesCopy] = useState();
 
@@ -37,7 +36,6 @@ const CategoryPage = () => {
 
     return (
         <div className="category-page">
-            <ErrorModal error={error} onClear={clearError} />
             {isLoading && (
                 <div className="center">
                     <LoadingSpinner />

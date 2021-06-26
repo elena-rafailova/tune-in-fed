@@ -48,7 +48,17 @@
     }
 }
 
+.profile-dropdown {
+    right: 10px;
+}
+
 @media (min-width: 768px) {
+    .categories-dropdown {
+        min-width: 24rem;
+        grid-template-columns: repeat(4, 10rem);
+        right: 2rem;
+    }
+
     .nav-links {
         flex-direction: row;
 

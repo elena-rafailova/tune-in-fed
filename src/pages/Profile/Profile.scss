@@ -27,11 +27,39 @@
             font-size: 20px;
         }
     }
+}
 
-    .payment-date {
-        margin: 20px 0;
-        color: $color-coral;
-        font-weight: bold;
-        font-size: 22px;
+.payment-date {
+    margin: 20px 0;
+    color: $color-coral;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.lists-container {
+    margin: 10px auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1360px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    .list {
+        margin: 10px;
+        width: 350px;
+        padding: 10px 0px 10px 5px;
+
+        .list-items {
+            max-height: 510px;
+            overflow-y: scroll;
+        }
     }
+}
+
+.profile-settings-modal .modal__content {
+    padding: 20px;
+}
+
+.profile-settings-modal-footer {
+    text-align: right;
 }

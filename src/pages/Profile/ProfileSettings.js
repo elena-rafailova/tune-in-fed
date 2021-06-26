@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Card from '../../components/UIElements/Card';
 import Input from '../../components/FormElements/Input';
 import Button from '../../components/FormElements/Button';
-import ErrorModal from '../../components/UIElements/ErrorModal';
-import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
+import Modal from '../../components/UIElements/Modal';
 import ImageUpload from '../../components/FormElements/ImageUpload';
 import {
     VALIDATOR_MINLENGTH,
@@ -18,7 +18,8 @@ import '../Auth/Auth.scss';
 
 const ProfileSettings = () => {
     const auth = useContext(AuthContext);
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -61,6 +62,7 @@ const ProfileSettings = () => {
             );
 
             auth.updateUser(responseData.user);
+            toast.success('You have successfully updated your profile.');
         } catch (err) {}
     };
 
@@ -83,11 +85,39 @@ const ProfileSettings = () => {
         } catch (err) {}
     };
 
+    const showDeleteWarningHandler = () => {
+        setShowConfirmModal(true);
+    };
+
+    const cancelDeleteHandler = () => {
+        setShowConfirmModal(false);
+    };
+
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={clearError} />
+            <Modal
+                className="profile-settings-modal"
+                show={showConfirmModal}
+                onCancel={cancelDeleteHandler}
+                header="Are you sure?"
+                footerClass="profile-settings-modal-footer"
+                footer={
+                    <React.Fragment>
+                        <Button inverse onClick={cancelDeleteHandler}>
+                            CANCEL
+                        </Button>
+                        <Button danger onClick={deleteAccount}>
+                            DELETE
+                        </Button>
+                    </React.Fragment>
+                }
+            >
+                <p>
+                    Do you want to proceed and delete your account? Please note
+                    that this action cannot be undone.
+                </p>
+            </Modal>
             <Card className="authentication">
-                {isLoading && <LoadingSpinner asOverlay />}
                 <h2>Settings</h2>
                 <hr />
                 <form onSubmit={authSubmitHandler}>
@@ -144,7 +174,7 @@ const ProfileSettings = () => {
                         SAVE CHANGES
                     </Button>
                 </form>
-                <Button danger onClick={deleteAccount}>
+                <Button danger onClick={showDeleteWarningHandler}>
                     DELETE MY ACCOUNT
                 </Button>
             </Card>

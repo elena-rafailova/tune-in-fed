@@ -3,7 +3,6 @@ import React, { useState, useContext } from 'react';
 import Card from '../../components/UIElements/Card';
 import Input from '../../components/FormElements/Input';
 import Button from '../../components/FormElements/Button';
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import ImageUpload from '../../components/FormElements/ImageUpload';
 import {
@@ -19,7 +18,7 @@ import './Auth.scss';
 const Auth = () => {
     const auth = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -81,11 +80,13 @@ const Auth = () => {
                         'Content-Type': 'application/json',
                     }
                 );
-                auth.login(
-                    responseData.userId,
-                    responseData.token,
-                    responseData.user
-                );
+
+                let user = {
+                    ...responseData.user,
+                    regDate: responseData.regDate,
+                };
+
+                auth.login(responseData.userId, responseData.token, user);
             } catch (err) {}
         } else {
             try {
@@ -101,18 +102,18 @@ const Auth = () => {
                     formData
                 );
 
-                auth.login(
-                    responseData.userId,
-                    responseData.token,
-                    responseData.user
-                );
+                let user = {
+                    ...responseData.user,
+                    regDate: responseData.regDate,
+                };
+
+                auth.login(responseData.userId, responseData.token, user);
             } catch (err) {}
         }
     };
 
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={clearError} />
             <Card className="authentication">
                 {isLoading && <LoadingSpinner asOverlay />}
                 <h2>{isLoginMode ? 'Login Required' : 'Sign up!'}</h2>

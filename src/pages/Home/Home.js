@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import FilesList from '../../components/File/FilesList';
 import SubscriptionsList from '../../components/Subscription/SubscriptionsList';
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../hooks/http-hook';
 
 const Home = () => {
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
     const [loadedFiles, setLoadedFiles] = useState();
     const [loadedSubscriptions, setLoadedSubscriptions] = useState();
     const [newFiles, setNewFiles] = useState();
@@ -52,7 +51,6 @@ const Home = () => {
 
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={clearError} />
             {isLoading && (
                 <div className="center">
                     <LoadingSpinner />

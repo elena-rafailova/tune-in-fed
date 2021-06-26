@@ -17,14 +17,14 @@
 .details-container {
     text-align: left;
     display: flex;
-    justify-content: flex-start;
+
     align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
     width: 100%;
 
     .file-image {
         width: 215px;
-        margin-right: 40px;
-        margin-top: 25px;
         border-radius: 5px;
     }
 
@@ -66,8 +66,6 @@
 }
 
 .episodes-container {
-    margin-right: 45px;
-
     .episodes {
         max-height: 435px;
         padding: 5px 15px 5px 3px;
@@ -77,7 +75,7 @@
     .episode-container {
         cursor: pointer;
         justify-content: flex-start;
-        width: 500px;
+        width: 325px;
         margin: 10px 0;
         padding: 8px 15px;
         font-size: 16px;
@@ -99,8 +97,8 @@
 
 .listening-station-container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     flex-wrap: wrap;
 }
@@ -108,5 +106,30 @@
 .main-info-container {
     .title {
         color: $color-blueberry;
+    }
+}
+
+@media (min-width: 768px) {
+    .details-container {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+
+        .file-image {
+            margin-right: 40px;
+            margin-top: 25px;
+        }
+    }
+
+    .episodes-container {
+        margin-right: 45px;
+
+        .episode-container {
+            width: 500px;
+        }
+    }
+
+    .listening-station-container {
+        align-items: flex-start;
+        justify-content: space-between;
     }
 }

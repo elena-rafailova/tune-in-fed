@@ -54,12 +54,6 @@
         grid-gap: 0;
         max-height: 50rem;
         min-width: auto;
-
-        &.categories {
-            min-width: 24rem;
-            grid-template-columns: repeat(4, 10rem);
-            right: 2rem;
-        }
     }
 
     .dropdown-menu li {

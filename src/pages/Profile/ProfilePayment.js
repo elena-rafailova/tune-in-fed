@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Card from '../../components/UIElements/Card';
 import Button from '../../components/FormElements/Button';
-import ErrorModal from '../../components/UIElements/ErrorModal';
 import LoadingSpinner from '../../components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../context/auth-context';
@@ -12,7 +12,7 @@ import './Profile.scss';
 
 const ProfilePayment = () => {
     const auth = useContext(AuthContext);
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
     const [planInfo, setPlanInfo] = useState();
 
     const savePlan = async () => {
@@ -35,8 +35,33 @@ const ProfilePayment = () => {
                     nextPaymentDate: responseData.nextPaymentDate,
                 };
                 auth.updateUser(newUser);
+                toast.success('You have successfully subscribed!');
             }
         } catch (err) {}
+    };
+
+    const getLastingFreeTrial = () => {
+        if (auth.user.isFreeTrial) {
+            const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            const regDate = new Date(auth.user.regDate);
+            const now = new Date();
+            // Discard the time and time-zone information.
+            const regDateUTC = Date.UTC(
+                regDate.getFullYear(),
+                regDate.getMonth(),
+                regDate.getDate()
+            );
+            const nowUTC = Date.UTC(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate()
+            );
+
+            let diffDays = Math.floor((nowUTC - regDateUTC) / _MS_PER_DAY);
+            return diffDays >= 14 ? 0 : 14 - diffDays;
+        }
+
+        return 0;
     };
 
     useEffect(() => {
@@ -55,7 +80,6 @@ const ProfilePayment = () => {
                     );
 
                     if (responseData.success) {
-                        console.log(responseData.plan);
                         setPlanInfo(responseData.plan);
                     }
                 } catch (err) {}
@@ -69,7 +93,6 @@ const ProfilePayment = () => {
         <React.Fragment>
             {auth.user.planId ? (
                 <div>
-                    <ErrorModal error={error} onClear={clearError} />
                     <Card className="authentication">
                         {isLoading && <LoadingSpinner asOverlay />}
                         {planInfo && (
@@ -103,8 +126,16 @@ const ProfilePayment = () => {
                     </Card>
                 </div>
             ) : (
-                <Card className="authentication">
-                    <div>You have not subscribed to any plan yet!</div>
+                <Card className="authentication payment-info-container">
+                    <h2 className="ta-center">
+                        You haven't subscribed to any plan yet! <br />
+                    </h2>
+                    <b className="payment-date ta-center">
+                        Your free trial{' '}
+                        {getLastingFreeTrial() === 0
+                            ? 'has expired!'
+                            : `expires in ${getLastingFreeTrial()} days!`}
+                    </b>
                 </Card>
             )}
         </React.Fragment>

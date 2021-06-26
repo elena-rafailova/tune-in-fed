@@ -210,7 +210,7 @@ const Filters = ({ filesOriginal, setFilesCopy }) => {
     }, [filtersToApply]);
 
     return (
-        <div className="center">
+        <div className="center wrap">
             <div
                 ref={dropdownTypeRef}
                 onClick={() => toggleDropdown('type', !dropdownsState.type)}

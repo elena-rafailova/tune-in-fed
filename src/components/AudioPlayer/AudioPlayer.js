@@ -4,7 +4,13 @@ import randomColor from 'randomcolor';
 import AudioControls from './AudioControls';
 import './AudioPlayer.scss';
 
-const AudioPlayer = ({ tracks, artistName, selectedTrackIndex }) => {
+const AudioPlayer = ({
+    tracks,
+    artistName,
+    selectedTrackIndex,
+    onPlay,
+    onFinish,
+}) => {
     const [trackIndex, setTrackIndex] = useState(0);
     const [trackProgress, setTrackProgress] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -62,6 +68,11 @@ const AudioPlayer = ({ tracks, artistName, selectedTrackIndex }) => {
         if (!isPlaying) {
             setIsPlaying(true);
         }
+
+        if (parseInt(trackProgress) === parseInt(duration)) {
+            setIsPlaying(false);
+        }
+
         startTimer();
     };
 
@@ -71,6 +82,7 @@ const AudioPlayer = ({ tracks, artistName, selectedTrackIndex }) => {
         } else {
             setTrackIndex(trackIndex - 1);
         }
+        onPlay();
     };
 
     const toNextTrack = () => {
@@ -79,16 +91,25 @@ const AudioPlayer = ({ tracks, artistName, selectedTrackIndex }) => {
         } else {
             setTrackIndex(0);
         }
+        onPlay();
     };
 
     useEffect(() => {
         if (isPlaying) {
+            onPlay();
             audioRef.current.play();
             startTimer();
         } else {
             audioRef.current.pause();
         }
     }, [isPlaying]);
+
+    useEffect(() => {
+        if (parseInt(trackProgress) === parseInt(duration)) {
+            onFinish();
+            setIsPlaying(false);
+        }
+    }, [trackProgress]);
 
     useEffect(() => {
         document.documentElement.style.setProperty('--active-color', color);
