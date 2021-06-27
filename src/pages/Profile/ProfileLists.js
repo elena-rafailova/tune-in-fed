@@ -14,7 +14,7 @@ const ProfileLists = () => {
 
     useEffect(() => {
         const getUserLists = async () => {
-            if (auth.user.planId) {
+            if (auth.user.planId || auth.user.isFreeTrial) {
                 try {
                     const responseData = await sendRequest(
                         process.env.REACT_APP_BACKEND_URL +
@@ -78,14 +78,14 @@ const ProfileLists = () => {
                 {isLoading && <LoadingSpinner asOverlay />}
                 {lists && lists.archive && lists.archive.length ? (
                     <div>
-                        <h3>Watch again</h3>
+                        <h3>Listen again</h3>
                         <div className="list-items small-lightblue-scrollbar">
                             <UserFilesList items={lists.archive} />
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <h3>Watch again</h3>
+                        <h3>Listen again</h3>
                         <h4>You don't have any listened files yet.</h4>
                     </div>
                 )}
