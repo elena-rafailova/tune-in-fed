@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import randomColor from 'randomcolor';
+import { toast } from 'react-toastify';
 
 import AudioControls from './AudioControls';
 import './AudioPlayer.scss';
@@ -10,6 +11,7 @@ const AudioPlayer = ({
     selectedTrackIndex,
     onPlay,
     onFinish,
+    canPlay,
 }) => {
     const [trackIndex, setTrackIndex] = useState(0);
     const [trackProgress, setTrackProgress] = useState(0);
@@ -82,7 +84,6 @@ const AudioPlayer = ({
         } else {
             setTrackIndex(trackIndex - 1);
         }
-        onPlay();
     };
 
     const toNextTrack = () => {
@@ -91,14 +92,17 @@ const AudioPlayer = ({
         } else {
             setTrackIndex(0);
         }
-        onPlay();
     };
 
     useEffect(() => {
         if (isPlaying) {
             onPlay();
-            audioRef.current.play();
-            startTimer();
+            if (canPlay) {
+                audioRef.current.play();
+                startTimer();
+            } else {
+                setIsPlaying(false);
+            }
         } else {
             audioRef.current.pause();
         }

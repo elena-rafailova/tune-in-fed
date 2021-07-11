@@ -21,6 +21,7 @@ const FileDetails = ({ history }) => {
     const [file, setFile] = useState();
     const [selectedTrackIndex, setSelectedTrackIndex] = useState(null);
     const [isInWishlist, setIsInWishlist] = useState(null);
+    const [canPlay, setCanPlay] = useState(true);
 
     const toggleWishlist = async (fileId) => {
         if (!auth.token) {
@@ -60,6 +61,9 @@ const FileDetails = ({ history }) => {
     const toggleCurrents = async (fileId) => {
         if (!auth.token) {
             history.push('/auth');
+        } else if (!canPlay) {
+            toast.warn('You cannot listen to files if you are not subscribed!');
+            return;
         } else {
             try {
                 let state = !auth.user.currents.includes(fileId);
@@ -92,6 +96,9 @@ const FileDetails = ({ history }) => {
     const toggleArchive = async (fileId) => {
         if (!auth.token) {
             history.push('/auth');
+        } else if (!canPlay) {
+            toast.warn('You cannot listen to files if you are not subscribed!');
+            return;
         } else {
             try {
                 let state = !auth.user.archive.includes(fileId);
@@ -127,6 +134,14 @@ const FileDetails = ({ history }) => {
             (auth.isLoggedIn && auth.user.wishlist.includes(fileId)) || false
         );
     };
+
+    useEffect(() => {
+        if (!auth.user.isSubActive && !auth.user.isFreeTrial) {
+            setCanPlay(false);
+        } else {
+            setCanPlay(true);
+        }
+    }, [auth]);
 
     useEffect(() => {
         const fetchFile = async () => {
@@ -261,6 +276,7 @@ const FileDetails = ({ history }) => {
                                 selectedTrackIndex={selectedTrackIndex}
                                 onPlay={() => toggleCurrents(file.id)}
                                 onFinish={() => toggleArchive(file.id)}
+                                canPlay={canPlay}
                             />
                         </div>
                     </div>

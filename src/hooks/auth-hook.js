@@ -44,7 +44,7 @@ export const useAuth = () => {
         setUserId(null);
         setUser({});
         localStorage.removeItem('userData');
-        window.location.replace('/');
+        window.location.replace('/auth');
     }, []);
 
     useEffect(() => {
